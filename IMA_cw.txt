@@ -1,0 +1,130 @@
+% (y1,y2,y3) = (x, y, theta)
+
+x1'(t) = 0.5*R(u1(t)+u2(t))*cos(x3(t))
+x2'(t) = 0.5*R(u1(t)+u2(t)*sin(x3(t))
+x3'(t) = R/L*(u2(t)-u1(t))
+
+
+y1(t)=x1(t)
+y2(t)=x2(t)
+y3(t)=x3(t)
+
+Dyskretyzacja
+Tp - okres probkowania
+
+x'(t) = (x(k+1)-x(k))/Tp
+
+Przeksztalcenie:
+a)
+(x1(k+1)-x1(k))/Tp = 0.5*R(u1(k)+u2(k))*cos(x3(k))
+(x2(k+1)-x2(k))/Tp = 0.5*R(u1(k)+u2(k))*sin(x3(k))
+(x3(k+1)-x3(k))/Tp = R/L*(u2(k)-u1(k))
+
+y1(k)=x1(k)
+y2(k)=x2(k)
+y3(k)=x3(k)
+
+
+
+b)
+x1(k+1) = 0.5*R(u1(k)+u2(k))*cos(x3(k))*Tp + x1(k)
+x2(k+1) = 0.5*R(u1(k)+u2(k))*sin(x3(k))*Tp + x2(k)
+x3(k+1) = R/L*(u2(k)-u1(k))*Tp + x3(k)
+
+y1(k)=x1(k)
+y2(k)=x2(k)
+y3(k)=x3(k)
+
+
+c) przesuniecie id
+x1(k) = 0.5*R(u1(k-1)+u2(k-1))*cos(x3(k-1))*Tp + x1(k-1)
+x2(k) = 0.5*R(u1(k-1)+u2(k-1))*sin(x3(k-1))*Tp + x2(k-1)
+x3(k) = R/L*(u2(k-1)-u1(k-1))*Tp + x3(k-1)
+
+y1(k)=x1(k)
+y2(k)=x2(k)
+y3(k)=x3(k)
+
+
+
+Linearyzacja modelu dyskretnego
+model zlinearyzowany dyskretny:
+
+szereg Taylora
+
+a)
+nieliniowe:
+x1(k) = 0.5*R(u1(k-1)+u2(k-1))*cos(x3(k-1))*Tp + x1(k-1)
+x2(k) = 0.5*R(u1(k-1)+u2(k-1))*sin(x3(k-1))*Tp + x2(k-1)
+
+liniowe:
+x3(k) = R/L*(u2(k-1)-u1(k-1))*Tp + x3(k-1)
+
+y1(k)=x1(k)
+y2(k)=x2(k)
+y3(k)=x3(k)
+
+b)
+
+nieliniowe:
+x1(k) = 0.5*R(u1(k-1)+u2(k-1))*cos(x3(k-1))*Tp + x1(k-1)   /  x1(k)=f1(x1(k-1), x3(k-1), u1(k-1), u2(k-1))
+x2(k) = 0.5*R(u1(k-1)+u2(k-1))*sin(x3(k-1))*Tp + x2(k-1)   /  x2(k)=f1(x2(k-1), x3(k-1), u1(k-1), u2(k-1))
+
+liniowe:
+x3(k) = R/L*(u2(k-1)-u1(k-1))*Tp + x3(k-1)
+
+y1(k)=x1(k)
+y2(k)=x2(k)
+y3(k)=x3(k)
+
+c)
+
+dla x1(k)=f1(...)
+i x2(k)=f2(...)
+
+%%%
+coeffs a11, a12, a22,... b21, b22 są zmienne w czasie (liczone w kazdym punkcie dyskretnym)
+punkty linearyzacji u1 i u2 wybierane są sterowania w poprzednim kroku, (linearyzacja wystepuje PRZED wyliczeniem
+sterowania dla aktualnego kroku, wiec nie ma dostepu do nadchodzacego sterowania)
+
+istnieje natomiast dostep do aktualnej pozycji robota, wiec te zmienne stanu mozna linearyzowac w AKTUALNYM punkcie
+
+punkt_u1 = u1(k-1)
+punkt_u2 = u2(k-1)
+
+punkt_x1(k) = x1(k)
+punkt_x2(k) = x2(k)
+punkt_x3(k) = x3(k)
+%%%
+
+x1(k)=f1(punkt_x1,punkt_x3,punkt_u1,punkt_u2) + a11*x1(k-1) + a13*x3(k-1) + b11*u1(k-1) + b12*u2(k-1)
+x2(k)=f2(punkt_x2,punkt_x3,punkt_u1,punkt_u2) + a22*x2(k-1) + a23*x3(k-1) + b21*u1(k-1) + b22*u2(k-1)
+
+nieliniowe:
+x1(k) = 0.5*R(u1(k-1)+u2(k-1))*cos(x3(k-1))*Tp + x1(k-1)   /  x1(k)=f1(x1(k-1), x3(k-1), u1(k-1), u2(k-1))
+x2(k) = 0.5*R(u1(k-1)+u2(k-1))*sin(x3(k-1))*Tp + x2(k-1)   /  x2(k)=f1(x2(k-1), x3(k-1), u1(k-1), u2(k-1))
+
+liniowe:
+x3(k) = R/L*(u2(k-1)-u1(k-1))*Tp + x3(k-1)
+
+y1(k)=x1(k)
+y2(k)=x2(k)
+y3(k)=x3(k)
+
+
+d) wyznaczenie macierzy A, B:
+a11(k) = 1, bo w 1 rownaniu jest 1*x1(k-1)
+a13(k) = -0.5*Tp*R(punkt_u1+punkt_u2)*sin(punkt_x3) /pochodna po x3
+b11 = 0.5*Tp*R*cos(punkt_x3)
+b21 = 0.5*Tp*R*cos(punkt_x3)
+
+a22(k) = 1
+a23(k) = 0.5*R*Tp*(punkt_u1+punkt_u2)*cos(punkt_x3) /pochodna po x3
+b21(k) = 0.5*Tp*R*sin(punkt_x3)
+b22(k) = 0.5*Tp*R*sin(punkt_x3)
+
+
+
+
+ESTYMATOR STANU
+wartosci estymowane x1 z ^, x2 z ^, x3 z ^
