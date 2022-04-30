@@ -37,9 +37,6 @@ tmax_odcinek = Tp;
 [yzad_1, yzad_2, yzad_3]=y_zadane();
 figure;
 plot(yzad_1, yzad_2);
-title("Prosta trajektoria zadana")
-xlabel("x")
-ylabel("y")
 
 
 if_hard_traj = 0;
@@ -84,7 +81,7 @@ yk_szum=zeros(3,kmax+N);
 zk=zeros(3,kmax+N);
 
 % trajektoria swobodna
-stan = 0; % stan==1 => stan mierzony, stan==0 => stan estymowany
+stan = 1; % stan==1 => stan mierzony, stan==0 => stan estymowany
 
 %%
 for k = kmin:kmax
@@ -231,68 +228,29 @@ for k = kmin:kmax
 end
 
 %% wykresy y na yzad 
-if stan == 1
-    figure;
-    plot(yk(1,1:kmax));
-    hold on
-    plot(yzad_1(1:kmax));
-    hold off
-    title("Wykres położenia robota wględem osi x, na tle wartości zadanej położenia dla stanu mierzonego")
-    legend("poł. x", "poł. zadane x")
-    xlabel("k")
-    ylabel("y")
-    
-    figure;
-    plot(yk(2,1:kmax));
-    hold on
-    plot(yzad_2(1:kmax));
-    hold off
-    title("Wykres położenia robota wględem osi y, na tle wartości zadanej położenia dla stanu mierzonego ")
-    legend("poł. y", "poł. zadane y")
-    xlabel("k")
-    ylabel("y")
-    
-    figure;
-    plot(yk(3,1:kmax));
-    hold on
-    plot(yzad_3(1:kmax));
-    hold off
-    title("Wykres położenia kątowego względem położenia zadanego dla stanu mierzonego")
-    legend("poł. kątowe", "poł. kątowe")
-    xlabel("k")
-    ylabel("y")
-else
-    figure;
-    plot(yk_est(1,1:kmax));
-    hold on
-    plot(yzad_1(1:kmax));
-    hold off
-    title("Wykres położenia robota wględem osi x, na tle wartości zadanej położenia dla stanu mierzonego")
-    legend("poł. x", "poł. zadane x")
-    xlabel("k")
-    ylabel("y")
-    
-    figure;
-    plot(yk_est(2,1:kmax));
-    hold on
-    plot(yzad_2(1:kmax));
-    hold off
-    title("Wykres położenia robota wględem osi y, na tle wartości zadanej położenia dla stanu mierzonego ")
-    legend("poł. y", "poł. zadane y")
-    xlabel("k")
-    ylabel("y")
-    
-    figure;
-    plot(yk_est(3,1:kmax));
-    hold on
-    plot(yzad_3(1:kmax));
-    hold off
-    title("Wykres położenia kątowego względem położenia zadanego dla stanu mierzonego")
-    legend("poł. kątowe", "poł. kątowe")
-    xlabel("k")
-    ylabel("y")
-end
+figure;
+plot(yk(1,1:kmax));
+hold on
+plot(yzad_1(1:kmax));
+hold off
+title("Wykres położenia koła 1 względem położenia zadanego dla stanu mierzonego")
+labels("y koła 1", "y zadane 1")
 
+figure;
+plot(yk(2,1:kmax));
+hold on
+plot(yzad_2(1:kmax));
+hold off
+title("Wykres położenia koła 2 względem położenia zadanego dla stanu mierzonego ")
+labels("y koła 1", "y zadane 1")
+
+figure;
+plot(yk(3,1:kmax));
+hold on
+plot(yzad_3(1:kmax));
+hold off
+title("Wykres położenia kątowego względem położenia zadanego dla stanu mierzonego")
+labels("y koła 1", "p")
 
 
 %% TODO wyznaczyc błąd średniokwadratowy
@@ -344,15 +302,15 @@ xlabel("k")
 tiledlayout(1,3)
 nexttile
 plot(yk(1, 1:k));
-title('Pozycja X')
-legend('pozycja X')
+title('Pozycja koła 1')
+legend('pozycja koła 1')
 ylabel("y")
 xlabel("k")
 
 nexttile
 plot(yk(2, 1:k))
-title('Pozycja Y')
-legend('pozycja Y')
+title('Pozycja koła 2')
+legend('pozycja koła 2')
 ylabel("y")
 xlabel("k")
 
